@@ -63,11 +63,6 @@
     button:hover {
       background-color: #45a049;
     }
-    .summary {
-      margin-top: 20px;
-      font-size: 1.1em;
-      text-align: center;
-    }
     .summary-box {
       margin-top: 30px;
       background: rgba(255, 255, 255, 0.15);
@@ -116,7 +111,7 @@
   </div>
 
   <script>
-    const API_URL = "https://script.google.com/macros/s/AKfycbxXr06pEkrN3PAy_65Z-LylJBb7Sh_Bd5OZAoGAdvitvn90u7zY3S9kxT16FnKMkyIivQ/exec";
+    const API_URL = "https://script.google.com/macros/s/AKfycbx31YQNxqS51KgsABWkwShSyqzGy81Dc73TVJS7LaIU9kSyaTiZnlFv92qJ2VaBPm5uDA/exec";
     const transaksi = [];
 
     function formatRupiah(angka) {
@@ -127,21 +122,22 @@
       const keterangan = document.getElementById("keterangan").value.trim();
       const jumlah = parseFloat(document.getElementById("jumlah").value);
       const jenis = document.getElementById("jenis").value;
+
       if (!keterangan || isNaN(jumlah) || jumlah <= 0) {
         alert("Mohon isi keterangan dan jumlah dengan benar.");
         return;
       }
 
-      const data = {
-        const data = {
-  keterangan,
-  jenis,
-  jumlah
+      const dataToSend = {
+        tanggal: new Date().toLocaleDateString('id-ID'),
+        keterangan,
+        jenis,
+        jumlah
       };
 
       fetch(API_URL, {
         method: "POST",
-        body: JSON.stringify(data),
+        body: JSON.stringify(dataToSend),
         headers: {
           "Content-Type": "application/json"
         }
@@ -149,7 +145,12 @@
       .then(res => res.text())
       .then(msg => {
         alert("✅ Data berhasil disimpan!");
-        transaksi.push(data);
+        transaksi.push({
+          tanggal: dataToSend.tanggal,
+          keterangan: dataToSend.keterangan,
+          masuk: dataToSend.jenis === 'masuk' ? dataToSend.jumlah : 0,
+          keluar: dataToSend.jenis === 'keluar' ? dataToSend.jumlah : 0
+        });
         renderTabel();
         document.getElementById("keterangan").value = "";
         document.getElementById("jumlah").value = "";
