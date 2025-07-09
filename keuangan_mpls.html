@@ -133,10 +133,10 @@
       }
 
       const data = {
-        tanggal: new Date().toLocaleDateString('id-ID'),
-        keterangan,
-        masuk: jenis === 'masuk' ? jumlah : 0,
-        keluar: jenis === 'keluar' ? jumlah : 0
+        const data = {
+  keterangan,
+  jenis,
+  jumlah
       };
 
       fetch(API_URL, {
