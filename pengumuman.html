@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pengumuman</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #6a11cb, #2575fc);
+      color: white;
+      margin: 0;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+    }
+    .announcement-form, .announcement {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      padding: 20px;
+      margin: 20px auto;
+      border-radius: 10px;
+      max-width: 700px;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: none;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+    }
+    input::placeholder, textarea::placeholder {
+      color: white;
+    }
+    button {
+      padding: 10px 20px;
+      background-color: #4caf50;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-right: 10px;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    .announcement-item {
+      background-color: rgba(255, 255, 255, 0.15);
+      margin-bottom: 20px;
+      padding: 15px;
+      border-radius: 10px;
+    }
+    .announcement-item h3 {
+      margin-top: 0;
+    }
+    .actions {
+      margin-top: 10px;
+    }
+    .actions button {
+      background-color: #2196f3;
+    }
+    .actions button.delete {
+      background-color: #f44336;
+    }
+  </style>
+</head>
+<body>
+  <h1>📢 Pengumuman</h1>
+
+  <div class="announcement-form">
+    <input type="text" id="judul" placeholder="Judul Pengumuman">
+    <textarea id="isi" rows="4" placeholder="Isi pengumuman"></textarea>
+    <button onclick="tambahPengumuman()">Tambah Pengumuman</button>
+  </div>
+
+  <div id="daftarPengumuman" class="announcement">
+    <!-- Pengumuman akan muncul di sini -->
+  </div>
+
+  <script>
+    let pengumumanList = [];
+
+    function tambahPengumuman() {
+      const judul = document.getElementById('judul').value.trim();
+      const isi = document.getElementById('isi').value.trim();
+
+      if (!judul || !isi) return alert('Isi semua kolom!');
+
+      pengumumanList.push({ judul, isi });
+      renderPengumuman();
+      document.getElementById('judul').value = '';
+      document.getElementById('isi').value = '';
+    }
+
+    function renderPengumuman() {
+      const container = document.getElementById('daftarPengumuman');
+      container.innerHTML = '';
+      pengumumanList.forEach((item, index) => {
+        container.innerHTML += `
+          <div class="announcement-item">
+            <h3>${item.judul}</h3>
+            <p>${item.isi}</p>
+            <div class="actions">
+              <button onclick="editPengumuman(${index})">Edit</button>
+              <button class="delete" onclick="hapusPengumuman(${index})">Hapus</button>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    function editPengumuman(index) {
+      const item = pengumumanList[index];
+      const judulBaru = prompt("Edit Judul:", item.judul);
+      const isiBaru = prompt("Edit Isi:", item.isi);
+      if (judulBaru && isiBaru) {
+        pengumumanList[index] = { judul: judulBaru, isi: isiBaru };
+        renderPengumuman();
+      }
+    }
+
+    function hapusPengumuman(index) {
+      if (confirm('Yakin ingin menghapus pengumuman ini?')) {
+        pengumumanList.splice(index, 1);
+        renderPengumuman();
+      }
+    }
+  </script>
+</body>
+</html>

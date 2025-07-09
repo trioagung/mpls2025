@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Petugas Upacara</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #6a11cb, #2575fc);
+      margin: 0;
+      padding: 20px;
+      color: #fff;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .pyramid {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 30px;
+    }
+    .level {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .card {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 15px;
+      padding: 20px;
+      width: 260px;
+      text-align: center;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    }
+    .card h2 {
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+    .card p {
+      font-size: 16px;
+      margin-bottom: 10px;
+      white-space: pre-line;
+    }
+    .card button {
+      margin: 5px 3px;
+      padding: 8px 14px;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .btn-tugas {
+      background-color: #4caf50;
+      color: white;
+    }
+    .btn-tugas:hover { background-color: #45a049; }
+  </style>
+  <script>
+    function goToTugas(jabatan) {
+      window.location.href = 'tugas.html?jabatan=' + encodeURIComponent(jabatan);
+    }
+  </script>
+</head>
+<body>
+  <h1>📢 Petugas Upacara Pembukaan & Penutupan</h1>
+  <div class="pyramid">
+    <div class="level">
+      <div class="card">
+        <h2>Pemimpin Upacara</h2>
+        <p>Jiwana</p>
+        <button class="btn-tugas" onclick="goToTugas('Pemimpin Upacara')">Tugas</button>
+      </div>
+    </div>
+    <div class="level">
+      <div class="card">
+        <h2>Pleton</h2>
+        <p>Putra
+Abid</p>
+        <button class="btn-tugas" onclick="goToTugas('Pleton')">Tugas</button>
+      </div>
+      <div class="card">
+        <h2>Pembawa Acara</h2>
+        <p>Syifa</p>
+        <button class="btn-tugas" onclick="goToTugas('Pembawa Acara')">Tugas</button>
+      </div>
+    </div>
+    <div class="level">
+      <div class="card">
+        <h2>Do'a</h2>
+        <p>Fira</p>
+        <button class="btn-tugas" onclick="goToTugas('Doa')">Tugas</button>
+      </div>
+      <div class="card">
+        <h2>Dirigen</h2>
+        <p>Dara</p>
+        <button class="btn-tugas" onclick="goToTugas('Dirigen')">Tugas</button>
+      </div>
+      <div class="card">
+        <h2>Pembawa Bendera</h2>
+        <p>Bunga
+Devita
+Tika</p>
+        <button class="btn-tugas" onclick="goToTugas('Pembawa Bendera')">Tugas</button>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panitia IPM 2025</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #6a11cb, #2575fc);
+      margin: 0;
+      padding: 20px;
+      color: #fff;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .pyramid {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 30px;
+    }
+    .level {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .card {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 15px;
+      padding: 20px;
+      width: 250px;
+      text-align: center;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    }
+    .card h2 {
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+    .card p {
+      font-size: 16px;
+      margin-bottom: 10px;
+      white-space: pre-line;
+    }
+    .card button {
+      margin: 5px 3px;
+      padding: 8px 14px;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .btn-tugas {
+      background-color: #4caf50;
+      color: white;
+    }
+    .btn-edit {
+      background-color: #2196f3;
+      color: white;
+    }
+    .btn-tugas:hover { background-color: #45a049; }
+    .btn-edit:hover { background-color: #1976d2; }
+    .btn-kembali {
+      display: block;
+      margin: 40px auto 0;
+      padding: 10px 20px;
+      background: #ffffff;
+      color: #2575fc;
+      text-decoration: none;
+      border-radius: 10px;
+      font-weight: bold;
+      text-align: center;
+      transition: background 0.3s;
+    }
+    .btn-kembali:hover {
+      background: #eeeeee;
+    }
+  </style>
+  <script>
+    function goToTugas(jabatan) {
+      window.location.href = 'tugas.html?jabatan=' + encodeURIComponent(jabatan);
+    }
+    function editAnggota(jabatan) {
+      const p = Array.from(document.querySelectorAll(".card"))
+        .find(el => el.querySelector("h2").textContent === jabatan)
+        .querySelector("p");
+      const anggotaLama = p.textContent.trim().split('\n');
+      const pilihan = prompt("Ketik '1' untuk menambah anggota, '2' untuk mengedit semua anggota:");
+      if (pilihan === '1') {
+        const namaBaru = prompt("Masukkan nama anggota baru:");
+        if (namaBaru) {
+          p.textContent += '\n' + namaBaru;
+        }
+      } else if (pilihan === '2') {
+        const semuaAnggota = prompt("Edit daftar anggota (pisahkan dengan enter):", anggotaLama.join('\n'));
+        if (semuaAnggota !== null) {
+          p.textContent = semuaAnggota;
+        }
+      }
+    }
+  </script>
+</head>
+<body>
+  <h1>👥 Struktur Panitia IPM 2025</h1>
+  <div class="pyramid">
+    <div class="level">
+      <div class="card">
+        <h2>Ketua</h2>
+        <p>Putra</p>
+        <button class="btn-tugas" onclick="goToTugas('Ketua')">Tugas</button>
+        <button class="btn-edit" onclick="editAnggota('Ketua')">Edit</button>
+      </div>
+    </div>
+    <div class="level">
+      <div class="card">
+        <h2>Wakil</h2>
+        <p>Jiwana</p>
+        <button class="btn-tugas" onclick="goToTugas('Wakil')">Tugas</button>
+        <button class="btn-edit" onclick="editAnggota('Wakil')">Edit</button>
+      </div>
+    </div>
+    <div class="level">
+      <div class="card">
+        <h2>PJ Kegiatan 1</h2>
+        <p>Bunga
+Abid</p>
+        <button class="btn-tugas" onclick="goToTugas('PJ Kegiatan 1')">Tugas</button>
+        <button class="btn-edit" onclick="editAnggota('PJ Kegiatan 1')">Edit</button>
+      </div>
+      <div class="card">
+        <h2>PJ Kegiatan 2</h2>
+        <p>Karisa
+Syifa</p>
+        <button class="btn-tugas" onclick="goToTugas('PJ Kegiatan 2')">Tugas</button>
+        <button class="btn-edit" onclick="editAnggota('PJ Kegiatan 2')">Edit</button>
+      </div>
+      <div class="card">
+        <h2>PJ Kegiatan 3</h2>
+        <p>Wahyu
+Afif</p>
+        <button class="btn-tugas" onclick="goToTugas('PJ Kegiatan 3')">Tugas</button>
+        <button class="btn-edit" onclick="editAnggota('PJ Kegiatan 3')">Edit</button>
+      </div>
+    </div>
+    <div class="level">
+      <div class="card">
+        <h2>PJ Kegiatan 4</h2>
+        <p>Devita
+Tika</p>
+        <button class="btn-tugas" onclick="goToTugas('PJ Kegiatan 4')">Tugas</button>
+        <button class="btn-edit" onclick="editAnggota('PJ Kegiatan 4')">Edit</button>
+      </div>
+      <div class="card">
+        <h2>PJ Kegiatan 5</h2>
+        <p>Fira
+Dara</p>
+        <button class="btn-tugas" onclick="goToTugas('PJ Kegiatan 5')">Tugas</button>
+        <button class="btn-edit" onclick="editAnggota('PJ Kegiatan 5')">Edit</button>
+      </div>
+      <div class="card">
+        <h2>PJ Kegiatan 6</h2>
+        <p>Anggit
+Ansar</p>
+        <button class="btn-tugas" onclick="goToTugas('PJ Kegiatan 6')">Tugas</button>
+        <button class="btn-edit" onclick="editAnggota('PJ Kegiatan 6')">Edit</button>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

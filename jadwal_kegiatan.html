@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jadwal Kegiatan</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #6a11cb, #2575fc);
+      color: white;
+      margin: 0;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .container {
+      max-width: 900px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(12px);
+      padding: 20px;
+      border-radius: 10px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 30px;
+    }
+    th, td {
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      padding: 10px;
+      text-align: left;
+    }
+    th {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+    .edit-btn, .hapus-btn, .up-btn, .down-btn {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1rem;
+      cursor: pointer;
+      margin-left: 5px;
+    }
+    .edit-btn:hover, .hapus-btn:hover, .up-btn:hover, .down-btn:hover {
+      color: yellow;
+    }
+    .form-group {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+    .form-group input {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+    }
+    .form-group input::placeholder {
+      color: white;
+    }
+    .tambah-btn {
+      padding: 10px 20px;
+      background-color: #4caf50;
+      border: none;
+      border-radius: 5px;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>📆 Jadwal Kegiatan</h1>
+  <div class="container">
+    <h2>Hari Pertama</h2>
+    <table id="table-hari1">
+      <thead>
+        <tr>
+          <th>No</th>
+          <th>Waktu</th>
+          <th>Plan A</th>
+          <th>Plan B</th>
+          <th>Aksi</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+    <div class="form-group">
+      <input type="text" id="waktu1" placeholder="Waktu kegiatan">
+      <input type="text" id="planA1" placeholder="Plan A">
+      <input type="text" id="planB1" placeholder="Plan B">
+      <button class="tambah-btn" onclick="tambahKegiatan('hari1')">Tambah</button>
+    </div>
+
+    <h2>Hari Kedua</h2>
+    <table id="table-hari2">
+      <thead>
+        <tr>
+          <th>No</th>
+          <th>Waktu</th>
+          <th>Plan A</th>
+          <th>Plan B</th>
+          <th>Aksi</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+    <div class="form-group">
+      <input type="text" id="waktu2" placeholder="Waktu kegiatan">
+      <input type="text" id="planA2" placeholder="Plan A">
+      <input type="text" id="planB2" placeholder="Plan B">
+      <button class="tambah-btn" onclick="tambahKegiatan('hari2')">Tambah</button>
+    </div>
+  </div>
+
+  <script>
+    const data = {
+      hari1: [],
+      hari2: []
+    };
+
+    function tambahKegiatan(hari) {
+      const waktu = document.getElementById('waktu' + (hari === 'hari1' ? '1' : '2')).value.trim();
+      const planA = document.getElementById('planA' + (hari === 'hari1' ? '1' : '2')).value.trim();
+      const planB = document.getElementById('planB' + (hari === 'hari1' ? '1' : '2')).value.trim();
+
+      if (waktu && planA && planB) {
+        data[hari].push({ waktu, planA, planB });
+        renderTabel(hari);
+        document.getElementById('waktu' + (hari === 'hari1' ? '1' : '2')).value = '';
+        document.getElementById('planA' + (hari === 'hari1' ? '1' : '2')).value = '';
+        document.getElementById('planB' + (hari === 'hari1' ? '1' : '2')).value = '';
+      }
+    }
+
+    function hapusKegiatan(hari, index) {
+      data[hari].splice(index, 1);
+      renderTabel(hari);
+    }
+
+    function editKegiatan(hari, index) {
+      const item = data[hari][index];
+      const waktuBaru = prompt("Edit Waktu:", item.waktu);
+      const planABaru = prompt("Edit Plan A:", item.planA);
+      const planBBaru = prompt("Edit Plan B:", item.planB);
+      if (waktuBaru && planABaru && planBBaru) {
+        data[hari][index] = { waktu: waktuBaru, planA: planABaru, planB: planBBaru };
+        renderTabel(hari);
+      }
+    }
+
+    function moveItem(hari, index, direction) {
+      const newIndex = index + direction;
+      if (newIndex >= 0 && newIndex < data[hari].length) {
+        const temp = data[hari][index];
+        data[hari][index] = data[hari][newIndex];
+        data[hari][newIndex] = temp;
+        renderTabel(hari);
+      }
+    }
+
+    function renderTabel(hari) {
+      const tbody = document.querySelector(`#table-${hari} tbody`);
+      tbody.innerHTML = '';
+
+      data[hari].forEach((item, index) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${index + 1}</td>
+          <td>${item.waktu}</td>
+          <td>${item.planA}</td>
+          <td>${item.planB}</td>
+          <td>
+            <button class="edit-btn" onclick="editKegiatan('${hari}', ${index})">✎</button>
+            <button class="hapus-btn" onclick="hapusKegiatan('${hari}', ${index})">×</button>
+            <button class="up-btn" onclick="moveItem('${hari}', ${index}, -1)">⬆️</button>
+            <button class="down-btn" onclick="moveItem('${hari}', ${index}, 1)">⬇️</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+  </script>
+</body>
+</html>

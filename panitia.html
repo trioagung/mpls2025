@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Struktur Panitia MPLS</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #6a11cb, #2575fc);
+      margin: 0;
+      padding: 20px;
+      color: #fff;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .btn-kembali {
+      display: block;
+      margin: 40px auto 0;
+      padding: 12px 24px;
+      background: #ffffff;
+      color: #2575fc;
+      text-decoration: none;
+      border-radius: 10px;
+      font-weight: bold;
+      text-align: center;
+      transition: background 0.3s;
+      width: fit-content;
+    }
+    .btn-kembali:hover {
+      background: #eeeeee;
+    }
+    .pyramid {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 30px;
+    }
+    .level {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .card {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 15px;
+      padding: 20px;
+      width: 260px;
+      text-align: center;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    }
+    .card h2 {
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+    .card p {
+      font-size: 16px;
+      margin-bottom: 10px;
+      white-space: pre-line;
+    }
+    .card button {
+      margin: 5px 3px;
+      padding: 8px 14px;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .btn-tugas {
+      background-color: #4caf50;
+      color: white;
+    }
+    .btn-edit {
+      background-color: #2196f3;
+      color: white;
+    }
+    .btn-tugas:hover { background-color: #45a049; }
+    .btn-edit:hover { background-color: #1976d2; }
+    .grid-koordinator {
+      margin-top: 50px;
+      text-align: center;
+    }
+    .grid-koordinator table {
+      width: 100%;
+      max-width: 800px;
+      margin: 0 auto;
+      border-collapse: collapse;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(12px);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .grid-koordinator th, .grid-koordinator td {
+      padding: 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+      color: #fff;
+    }
+    .grid-koordinator th {
+      background-color: rgba(0, 0, 0, 0.3);
+    }
+  </style>
+  <script>
+    function goToTugas(jabatan) {
+      window.location.href = 'tugas.html?jabatan=' + encodeURIComponent(jabatan);
+    }
+    function editAnggota(jabatan, el = null) {
+      const p = el ? el.closest('tr').querySelector('td:nth-child(2)') : Array.from(document.querySelectorAll(".card")).find(el => el.querySelector("h2").textContent === jabatan).querySelector("p");
+      const anggotaLama = p.textContent.trim().split('\n');
+      const pilihan = prompt("Ketik '1' untuk menambah anggota, '2' untuk mengedit semua anggota:");
+      if (pilihan === '1') {
+        const namaBaru = prompt("Masukkan nama anggota baru:");
+        if (namaBaru) {
+          p.textContent += '\n' + namaBaru;
+        }
+      } else if (pilihan === '2') {
+        const semuaAnggota = prompt("Edit daftar anggota (pisahkan dengan enter):", anggotaLama.join('\n'));
+        if (semuaAnggota !== null) {
+          p.textContent = semuaAnggota;
+        }
+      }
+    }
+  </script>
+</head>
+<body>
+  <h1>👥 Struktur Panitia Kemah MPLS 2025</h1>
+  <div class="pyramid">
+    <div class="level">
+      <div class="card">
+        <h2>Penanggung Jawab</h2>
+        <p>Yulianto, ST</p>
+        <button class="btn-tugas" onclick="goToTugas('Penanggung Jawab')">Tugas</button>
+        <button class="btn-edit" onclick="editAnggota('Penanggung Jawab')">Edit</button>
+      </div>
+    </div>
+    <div class="level">
+      <div class="card">
+        <h2>Ketua Pelaksana</h2>
+        <p>Trio Agung Wahyono, S.Pd</p>
+        <button class="btn-tugas" onclick="goToTugas('Ketua Pelaksana')">Tugas</button>
+        <button class="btn-edit" onclick="editAnggota('Ketua Pelaksana')">Edit</button>
+      </div>
+    </div>
+    <div class="level">
+      <div class="card">
+        <h2>Sekretaris</h2>
+        <p>Siti Alfiyah, S.Pd</p>
+        <button class="btn-tugas" onclick="goToTugas('Sekretaris')">Tugas</button>
+        <button class="btn-edit" onclick="editAnggota('Sekretaris')">Edit</button>
+      </div>
+      <div class="card">
+        <h2>Bendahara</h2>
+        <p>Khoffiah Anif Maghfiroh, M.Psi</p>
+        <button class="btn-tugas" onclick="goToTugas('Bendahara')">Tugas</button>
+        <button class="btn-edit" onclick="editAnggota('Bendahara')">Edit</button>
+      </div>
+    </div>
+    <div class="level">
+      <div class="card">
+        <h2>Seksi Konsumsi</h2>
+        <p>Siti Khusnul Jamilah, S.Pd
+Ibu Suci Cahyati, S.Pd
+Isna Auli Sabilla</p>
+        <button class="btn-tugas" onclick="goToTugas('Seksi Konsumsi')">Tugas</button>
+        <button class="btn-edit" onclick="editAnggota('Seksi Konsumsi')">Edit</button>
+      </div>
+      <div class="card">
+        <h2>Seksi Perlengkapan (Perkap)</h2>
+        <p>Joko Harmanto Budiono
+Nur rohman
+Bapak Darno
+Angga bayu prasetya</p>
+        <button class="btn-tugas" onclick="goToTugas('Seksi Perlengkapan (Perkap)')">Tugas</button>
+        <button class="btn-edit" onclick="editAnggota('Seksi Perlengkapan (Perkap)')">Edit</button>
+      </div>
+    </div>
+    <div class="level">
+      <div class="card">
+        <h2>Seksi Humas</h2>
+        <p>Imam Rifai</p>
+        <button class="btn-tugas" onclick="goToTugas('Seksi Humas')">Tugas</button>
+        <button class="btn-edit" onclick="editAnggota('Seksi Humas')">Edit</button>
+      </div>
+      <div class="card">
+        <h2>Seksi Dokumentasi</h2>
+        <p>Anang Dedi</p>
+        <button class="btn-tugas" onclick="goToTugas('Seksi Dokumentasi')">Tugas</button>
+        <button class="btn-edit" onclick="editAnggota('Seksi Dokumentasi')">Edit</button>
+      </div>
+    </div>
+    <div class="level">
+      <div class="card">
+        <h2>Seksi P3K (Kesehatan)</h2>
+        <p>Aprilia Intan Permatasari, S.Pd
+Dwi Pradika Yulianti, S.Pd</p>
+        <button class="btn-tugas" onclick="goToTugas('Seksi P3K (Kesehatan)')">Tugas</button>
+        <button class="btn-edit" onclick="editAnggota('Seksi P3K (Kesehatan)')">Edit</button>
+      </div>
+      <div class="card">
+        <h2>Seksi Keamanan</h2>
+        <p>Muhammad Syamsudin, S.Pd
+Bambang supiyarto, S.Kom
+Andri NugrohoUtomo, S.Pd</p>
+        <button class="btn-tugas" onclick="goToTugas('Seksi Keamanan')">Tugas</button>
+        <button class="btn-edit" onclick="editAnggota('Seksi Keamanan')">Edit</button>
+      </div>
+    </div>
+  </div>
+  <div class="grid-koordinator">
+    <h2>Koordinator Kelompok</h2>
+    <table>
+      <thead>
+        <tr><th>Kelompok</th><th>Koordinator</th><th>Aksi</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>1–2</td><td>Rizza Aulia Rahman, S.Mat</td><td><button class="btn-edit" onclick="editAnggota('Koordinator 1–2', this)">Edit</button></td></tr>
+        <tr><td>3–4</td><td>Wiyiga Nata Saputra</td><td><button class="btn-edit" onclick="editAnggota('Koordinator 3–4', this)">Edit</button></td></tr>
+        <tr><td>5–6</td><td>Widi Hasto Kuncahyo, S.Pd</td><td><button class="btn-edit" onclick="editAnggota('Koordinator 5–6', this)">Edit</button></td></tr>
+        <tr><td>7–8</td><td>Daryanto, ST</td><td><button class="btn-edit" onclick="editAnggota('Koordinator 7–8', this)">Edit</button></td></tr>
+        <tr><td>9–10</td><td>Irtanto, ST</td><td><button class="btn-edit" onclick="editAnggota('Koordinator 9–10', this)">Edit</button></td></tr>
+        <tr><td>11–12</td><td>Giarto, S.Pd</td><td><button class="btn-edit" onclick="editAnggota('Koordinator 11–12', this)">Edit</button></td></tr>
+        <tr><td>13–14</td><td>Mulyani, S.Pd</td><td><button class="btn-edit" onclick="editAnggota('Koordinator 13–14', this)">Edit</button></td></tr>
+      </tbody>
+    </table>
+    <br>
+    <button class="btn-tugas" onclick="goToTugas('Koordinator Kelompok')">Tugas Koordinator Kelompok</button>
+  </div>
+  <a href="javascript:history.back()" class="btn-kembali">⬅️ Kembali</a>
+</body>
+</html>

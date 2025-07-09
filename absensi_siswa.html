@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Absensi Siswa</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #6a11cb, #2575fc);
+      color: white;
+      margin: 0;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+    }
+    .container {
+      max-width: 1000px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      padding: 20px;
+      border-radius: 10px;
+    }
+    h2 {
+      margin-top: 30px;
+      color: white;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      margin-bottom: 30px;
+    }
+    th, td {
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      padding: 10px;
+      text-align: center;
+    }
+    th {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+    input[type="checkbox"] {
+      transform: scale(1.2);
+    }
+    input[type="text"] {
+      padding: 8px;
+      border-radius: 6px;
+      border: none;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+    }
+    .form-section {
+      margin-bottom: 30px;
+    }
+    .form-section button {
+      margin-top: 10px;
+      padding: 10px 20px;
+      border: none;
+      background-color: #4caf50;
+      color: white;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .agenda-header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+    .agenda-header button {
+      background: transparent;
+      border: none;
+      color: white;
+      cursor: pointer;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <h1>📋 Absensi Peserta Berdasarkan Kelompok</h1>
+
+  <div class="container">
+    <div class="form-section">
+      <h2>Tambah Kelompok</h2>
+      <label>Nama Kelompok:</label>
+      <input type="text" id="namaKelompok" placeholder="Contoh: Kelompok 1">
+
+      <label>Nama Anggota (pisahkan dengan koma):</label>
+      <input type="text" id="anggotaList" placeholder="Contoh: Ani Nurul, Rizki Pratama">
+
+      <button onclick="tambahKelompok()">Tambah Kelompok</button>
+    </div>
+
+    <div class="form-section">
+      <h2>Tambah Agenda</h2>
+      <label>Nama Agenda Baru:</label>
+      <input type="text" id="agendaBaru" placeholder="Contoh: Kegiatan Outbond">
+      <button onclick="tambahAgenda()">Tambah Agenda</button>
+    </div>
+
+    <div id="outputArea"></div>
+  </div>
+
+  <script>
+    let agendaList = [];
+    let kelompokData = [];
+    let checklistData = [];
+
+    function tambahAgenda() {
+      const agenda = document.getElementById("agendaBaru").value.trim();
+      if (agenda && !agendaList.includes(agenda)) {
+        agendaList.push(agenda);
+        checklistData.forEach(row => row.push(false));
+        renderTabel();
+        document.getElementById("agendaBaru").value = "";
+      }
+    }
+
+    function tambahKelompok() {
+      const namaKelompok = document.getElementById("namaKelompok").value.trim();
+      const anggotaList = document.getElementById("anggotaList").value.split(",").map(a => a.trim()).filter(a => a);
+
+      if (!namaKelompok || anggotaList.length === 0) {
+        alert("Mohon lengkapi semua data kelompok");
+        return;
+      }
+
+      kelompokData.push({ nama: namaKelompok, anggota: anggotaList });
+      anggotaList.forEach(() => checklistData.push(new Array(agendaList.length).fill(false)));
+      renderTabel();
+
+      document.getElementById("namaKelompok").value = "";
+      document.getElementById("anggotaList").value = "";
+    }
+
+    function pindahAgenda(index, arah) {
+      if ((arah === 'left' && index === 0) || (arah === 'right' && index === agendaList.length - 1)) return;
+      const newIndex = arah === 'left' ? index - 1 : index + 1;
+      [agendaList[index], agendaList[newIndex]] = [agendaList[newIndex], agendaList[index]];
+      checklistData.forEach(row => [row[index], row[newIndex]] = [row[newIndex], row[index]]);
+      renderTabel();
+    }
+
+    function toggleCheck(rowIdx, colIdx) {
+      checklistData[rowIdx][colIdx] = !checklistData[rowIdx][colIdx];
+    }
+
+    function renderTabel() {
+      const output = document.getElementById("outputArea");
+      output.innerHTML = "";
+
+      let anggotaIndex = 0;
+
+      kelompokData.forEach(kelompok => {
+        let html = `<h2>${kelompok.nama}</h2>`;
+        html += `<table><thead><tr><th>Nama</th>`;
+        agendaList.forEach((agenda, index) => {
+          html += `<th>
+            <div class="agenda-header">
+              <button onclick="pindahAgenda(${index}, 'left')">⬅️</button>
+              ${agenda}
+              <button onclick="pindahAgenda(${index}, 'right')">➡️</button>
+            </div>
+          </th>`;
+        });
+        html += `</tr></thead><tbody>`;
+        kelompok.anggota.forEach((nama, i) => {
+          html += `<tr><td>${nama}</td>`;
+          agendaList.forEach((_, j) => {
+            const checked = checklistData[anggotaIndex][j] ? "checked" : "";
+            html += `<td><input type='checkbox' ${checked} onclick="toggleCheck(${anggotaIndex}, ${j})"></td>`;
+          });
+          html += `</tr>`;
+          anggotaIndex++;
+        });
+        html += `</tbody></table>`;
+
+        output.innerHTML += html;
+      });
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Detail Tugas Jabatan</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #6a11cb, #2575fc);
+      color: #fff;
+      padding: 20px;
+    }
+    .container {
+      max-width: 800px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 15px;
+      padding: 30px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    h2 {
+      margin-top: 30px;
+    }
+    ul {
+      list-style: none;
+      padding-left: 0;
+    }
+    li {
+      background: rgba(255,255,255,0.15);
+      margin: 10px 0;
+      padding: 10px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .task {
+      display: flex;
+      align-items: center;
+    }
+    .task span {
+      margin-left: 10px;
+    }
+    button {
+      padding: 6px 12px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .btn-add {
+      background-color: #4caf50;
+      color: white;
+    }
+    .btn-remove {
+      background-color: #f44336;
+      color: white;
+      margin-left: 10px;
+    }
+    .btn-edit {
+      background-color: #ff9800;
+      color: white;
+      margin-left: 10px;
+    }
+    .btn-back {
+      display: block;
+      width: fit-content;
+      margin: 30px auto 0;
+      text-align: center;
+      background: white;
+      color: #2575fc;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: bold;
+      text-decoration: none;
+      transition: background 0.3s ease;
+    }
+    .btn-back:hover {
+      background: #e0e0e0;
+    }
+    .input-area {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+    #inputTugas {
+      flex: 1;
+      padding: 10px;
+      border-radius: 6px;
+      border: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 id="judulTugas">Tugas Jabatan</h1>
+
+    <h2>Tugas Umum</h2>
+    <ul id="tugasUmum">
+      <li><span>Memastikan kelancaran pelaksanaan kegiatan</span></li>
+      <li><span>Berkoordinasi dengan panitia lain</span></li>
+      <li><span>Mengatur waktu dan jadwal pelaksanaan</span></li>
+      <li><span>Melaporkan perkembangan kegiatan kepada penanggung jawab</span></li>
+      <li><span>Menjaga komunikasi dan kedisiplinan antar anggota panitia</span></li>
+    </ul>
+
+    <h2>Tugas Khusus</h2>
+    <ul id="tugasKhusus"></ul>
+    <div class="input-area">
+      <input type="text" id="inputTugas" placeholder="Tambah tugas khusus...">
+      <button class="btn-add" onclick="tambahTugas()">Tambah Tugas</button>
+    </div>
+
+    <button class="btn-back" onclick="goBack()">⬅ Kembali ke Struktur</button>
+  </div>
+
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const jabatan = urlParams.get('jabatan') || 'Panitia';
+    document.getElementById("judulTugas").innerText = "Tugas " + jabatan;
+
+    function tambahTugas() {
+      const input = document.getElementById("inputTugas");
+      const tugas = input.value.trim();
+      if (tugas) {
+        const li = document.createElement("li");
+        li.innerHTML = `
+          <div class="task">
+            <input type="checkbox">
+            <span>${tugas}</span>
+          </div>
+          <div>
+            <button class="btn-edit" onclick="editTugas(this)">Edit</button>
+            <button class="btn-remove" onclick="hapusTugas(this)">Hapus</button>
+          </div>
+        `;
+        document.getElementById("tugasKhusus").appendChild(li);
+        input.value = "";
+      }
+    }
+
+    function editTugas(el) {
+      const taskSpan = el.parentElement.parentElement.querySelector(".task span");
+      const currentText = taskSpan.textContent;
+      const newText = prompt("Edit tugas:", currentText);
+      if (newText !== null && newText.trim() !== "") {
+        taskSpan.textContent = newText.trim();
+      }
+    }
+
+    function hapusTugas(el) {
+      el.parentElement.parentElement.remove();
+    }
+
+    function goBack() {
+      if (document.referrer && document.referrer !== location.href) {
+        window.location.href = document.referrer;
+      } else {
+        window.location.href = "struktur.html";
+      }
+    }
+  </script>
+</body>
+</html>

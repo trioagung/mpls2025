@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Logistik</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #6a11cb, #2575fc);
+      color: white;
+      margin: 0;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+    }
+    .logistik-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+      margin-top: 40px;
+    }
+    .logistik-box {
+      flex: 1;
+      min-width: 280px;
+      max-width: 350px;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(15px);
+      border-radius: 10px;
+      padding: 20px;
+      position: relative;
+      color: white;
+    }
+    .individu {
+      border-top: 5px solid #007bff;
+    }
+    .kelompok {
+      border-top: 5px solid #28a745;
+    }
+    .larangan {
+      border-top: 5px solid #dc3545;
+    }
+    .logistik-box h2 {
+      margin-top: 0;
+      text-align: center;
+    }
+    .logistik-box .edit-section {
+      margin-top: 15px;
+    }
+    .logistik-box textarea {
+      width: 100%;
+      background: rgba(255,255,255,0.1);
+      border: none;
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 6px;
+      color: white;
+      resize: vertical;
+    }
+    .logistik-box .action-btn {
+      margin-top: 10px;
+      display: inline-block;
+      padding: 6px 12px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+      margin-right: 5px;
+    }
+    .add-btn {
+      background-color: #4caf50;
+      color: white;
+    }
+    ul {
+      padding-left: 20px;
+      list-style-type: decimal;
+    }
+    li {
+      margin: 5px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .delete-icon {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .delete-icon:hover {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <h1>📦 Daftar Logistik</h1>
+  <div class="logistik-container">
+    <div class="logistik-box individu">
+      <h2>Logistik Pribadi</h2>
+      <ul id="list-individu"></ul>
+      <div class="edit-section">
+        <textarea id="input-individu" placeholder="Tambahkan logistik pribadi..."></textarea>
+        <button class="action-btn add-btn" onclick="tambahItem('individu')">Tambah</button>
+      </div>
+    </div>
+    <div class="logistik-box kelompok">
+      <h2>Logistik Kelompok</h2>
+      <ul id="list-kelompok"></ul>
+      <div class="edit-section">
+        <textarea id="input-kelompok" placeholder="Tambahkan logistik kelompok..."></textarea>
+        <button class="action-btn add-btn" onclick="tambahItem('kelompok')">Tambah</button>
+      </div>
+    </div>
+    <div class="logistik-box larangan">
+      <h2>Barang Larangan</h2>
+      <ul id="list-larangan"></ul>
+      <div class="edit-section">
+        <textarea id="input-larangan" placeholder="Tambahkan barang larangan..."></textarea>
+        <button class="action-btn add-btn" onclick="tambahItem('larangan')">Tambah</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const data = {
+      individu: [],
+      kelompok: [],
+      larangan: []
+    };
+
+    function tambahItem(kategori) {
+      const input = document.getElementById('input-' + kategori);
+      const value = input.value.trim();
+      if (value) {
+        data[kategori].push(value);
+        input.value = '';
+        renderList(kategori);
+      }
+    }
+
+    function hapusItem(kategori, index) {
+      data[kategori].splice(index, 1);
+      renderList(kategori);
+    }
+
+    function renderList(kategori) {
+      const list = document.getElementById('list-' + kategori);
+      list.innerHTML = '';
+      data[kategori].forEach((item, index) => {
+        const li = document.createElement('li');
+        li.innerHTML = `<span>${item}</span><button class="delete-icon" onclick="hapusItem('${kategori}', ${index})">×</button>`;
+        list.appendChild(li);
+      });
+    }
+  </script>
+</body>
+</html>

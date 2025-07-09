@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Daftar Kelompok</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #6a11cb, #2575fc);
+      color: white;
+      margin: 0;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .form-container {
+      display: none;
+      max-width: 600px;
+      margin: 40px auto;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 20px;
+      border-radius: 12px;
+      backdrop-filter: blur(10px);
+    }
+    input, textarea, button {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+    }
+    input, textarea {
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+    }
+    input::placeholder, textarea::placeholder {
+      color: white;
+    }
+    button {
+      background: #4caf50;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #45a049;
+    }
+    .group-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+      max-width: 1200px;
+      margin: auto;
+    }
+    .group {
+      flex: 1 1 300px;
+      max-width: 350px;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      padding: 20px;
+      border-radius: 12px;
+    }
+    .group h3 {
+      margin-top: 0;
+    }
+    .group-buttons {
+      margin-top: 10px;
+    }
+    .group-buttons button {
+      width: auto;
+      margin-right: 10px;
+      background: #2196f3;
+    }
+    .group-buttons button.delete {
+      background: #f44336;
+    }
+    .btn-toggle-form {
+      display: block;
+      margin: 40px auto 20px;
+      padding: 10px 20px;
+      background-color: #ffffff;
+      color: #2575fc;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .btn-toggle-form:hover {
+      background-color: #eeeeee;
+    }
+  </style>
+</head>
+<body>
+  <h1>📘 Daftar Kelompok</h1>
+
+  <div class="group-grid" id="groupList">
+    <!-- Tempat munculnya kelompok yang sudah dibuat -->
+  </div>
+
+  <button class="btn-toggle-form" onclick="toggleForm()">➕ Tambah Kelompok</button>
+
+  <div class="form-container" id="formContainer">
+    <h2>Formulir Kelompok Baru</h2>
+    <input type="text" id="namaKelompok" placeholder="Nama Kelompok">
+    <input type="text" id="koordinator" placeholder="Nama Koordinator Kelompok (pisahkan dengan enter)">
+    <input type="text" id="ketua" placeholder="Nama Ketua Kelompok">
+    <textarea id="anggota" rows="4" placeholder="Anggota Kelompok (pisahkan dengan enter)"></textarea>
+    <button onclick="buatKelompok()">Buat Kelompok</button>
+  </div>
+
+  <script>
+    let kelompokData = [];
+
+    function toggleForm() {
+      const form = document.getElementById("formContainer");
+      form.style.display = form.style.display === "none" ? "block" : "none";
+    }
+
+    function buatKelompok() {
+      const nama = document.getElementById("namaKelompok").value.trim();
+      const koordinator = document.getElementById("koordinator").value.trim().split(/\n|,/).map(n => n.trim()).filter(n => n);
+      const ketua = document.getElementById("ketua").value.trim();
+      const anggota = document.getElementById("anggota").value.trim().split(/\n|,/).map(n => n.trim()).filter(n => n);
+      if (!nama || !koordinator.length || !ketua || !anggota.length) return alert("Mohon lengkapi semua kolom");
+
+      kelompokData.push({ nama, koordinator, ketua, anggota });
+      renderKelompok();
+
+      document.getElementById("namaKelompok").value = "";
+      document.getElementById("koordinator").value = "";
+      document.getElementById("ketua").value = "";
+      document.getElementById("anggota").value = "";
+    }
+
+    function renderKelompok() {
+      const container = document.getElementById("groupList");
+      container.innerHTML = "";
+      kelompokData.forEach((k, i) => {
+        const koorList = k.koordinator.map((n, i) => `${i + 1}. ${n}`).join("<br>");
+        const anggotaList = k.anggota.map((n, i) => `${i + 1}. ${n}`).join("<br>");
+        container.innerHTML += `
+          <div class="group">
+            <h3>${k.nama}</h3>
+            <p><strong>Koordinator:</strong><br>${koorList}</p>
+            <p><strong>Ketua:</strong> ${k.ketua}</p>
+            <p><strong>Anggota:</strong><br>${anggotaList}</p>
+            <div class="group-buttons">
+              <button onclick="editKelompok(${i})">Edit</button>
+              <button class="delete" onclick="hapusKelompok(${i})">Hapus</button>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    function hapusKelompok(index) {
+      if (confirm("Yakin ingin menghapus kelompok ini?")) {
+        kelompokData.splice(index, 1);
+        renderKelompok();
+      }
+    }
+
+    function editKelompok(index) {
+      const k = kelompokData[index];
+      const nama = prompt("Edit Nama Kelompok:", k.nama);
+      const koor = prompt("Edit Koordinator (pisahkan dengan koma):", k.koordinator.join(", "));
+      const ketua = prompt("Edit Ketua Kelompok:", k.ketua);
+      const anggota = prompt("Edit Anggota (pisahkan dengan koma):", k.anggota.join(", "));
+      if (nama && koor && ketua && anggota) {
+        kelompokData[index] = {
+          nama,
+          koordinator: koor.split(",").map(n => n.trim()),
+          ketua,
+          anggota: anggota.split(",").map(n => n.trim())
+        };
+        renderKelompok();
+      }
+    }
+  </script>
+</body>
+</html>
