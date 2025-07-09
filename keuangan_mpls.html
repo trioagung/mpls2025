@@ -116,6 +116,7 @@
   </div>
 
   <script>
+    const API_URL = "https://script.google.com/macros/s/AKfycbxXr06pEkrN3PAy_65Z-LylJBb7Sh_Bd5OZAoGAdvitvn90u7zY3S9kxT16FnKMkyIivQ/exec";
     const transaksi = [];
 
     function formatRupiah(angka) {
@@ -138,10 +139,22 @@
         keluar: jenis === 'keluar' ? jumlah : 0
       };
 
-      transaksi.push(data);
-      renderTabel();
-      document.getElementById("keterangan").value = "";
-      document.getElementById("jumlah").value = "";
+      fetch(API_URL, {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+          "Content-Type": "application/json"
+        }
+      })
+      .then(res => res.text())
+      .then(msg => {
+        alert("✅ Data berhasil disimpan!");
+        transaksi.push(data);
+        renderTabel();
+        document.getElementById("keterangan").value = "";
+        document.getElementById("jumlah").value = "";
+      })
+      .catch(err => alert("❌ Gagal mengirim data: " + err));
     }
 
     function renderTabel() {
