@@ -1,125 +1,82 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Keuangan MPLS</title>
-  <style>
-    /* [Gaya tampilan tetap, tidak berubah] */
-    body { font-family: 'Segoe UI', sans-serif; background: linear-gradient(to right, #6a11cb, #2575fc); color: white; margin: 0; padding: 20px; }
-    h1 { text-align: center; }
-    .container { max-width: 1000px; margin: auto; background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); padding: 20px; border-radius: 10px; }
-    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-    th, td { padding: 12px; border: 1px solid rgba(255,255,255,0.4); text-align: left; }
-    th { background-color: rgba(255,255,255,0.2); }
-    input, select { padding: 8px; width: 100%; border: none; border-radius: 6px; background: rgba(255,255,255,0.2); color: white; }
-    input::placeholder { color: white; }
-    select option { color: black; }
-    button { margin-top: 10px; padding: 10px 20px; background-color: #4caf50; color: white; font-weight: bold; border: none; border-radius: 8px; cursor: pointer; }
-    button:hover { background-color: #45a049; }
-    .summary-box { margin-top: 30px; background: rgba(255,255,255,0.15); padding: 20px; border-radius: 10px; backdrop-filter: blur(12px); color: #fff; }
-    .summary-box p { font-size: 1.2em; margin: 10px 0; }
-  </style>
-</head>
-<body>
-  <h1>📒 Pencatatan Keuangan MPLS</h1>
-  <div class="container">
-    <h2>Form Input Transaksi</h2>
-    <input type="text" id="keterangan" placeholder="Keterangan (Contoh: Sumbangan siswa, Pembelian makanan)">
-    <input type="number" id="jumlah" placeholder="Jumlah (Rp)">
-    <select id="jenis">
-      <option value="masuk">Uang Masuk</option>
-      <option value="keluar">Uang Keluar</option>
-    </select>
-    <button onclick="tambahTransaksi()">Tambah Transaksi</button>
+const API_URL = "URL_WEB_APP_KAMU"; // Ganti dengan URL Web App dari langkah sebelumnya
+const transaksi = [];
 
-    <h2>Riwayat Transaksi</h2>
-    <table id="tabelKeuangan">
-      <thead>
-        <tr>
-          <th>No</th>
-          <th>Tanggal</th>
-          <th>Keterangan</th>
-          <th>Masuk (Rp)</th>
-          <th>Keluar (Rp)</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
+function formatRupiah(angka) {
+  return 'Rp ' + angka.toLocaleString('id-ID');
+}
 
-    <div class="summary-box">
-      <p>Total Masuk: <span id="totalMasuk">Rp 0</span></p>
-      <p>Total Keluar: <span id="totalKeluar">Rp 0</span></p>
-      <p><strong>Saldo Akhir: <span id="saldo">Rp 0</span></strong></p>
-    </div>
-  </div>
+function tambahTransaksi() {
+  const keterangan = document.getElementById("keterangan").value.trim();
+  const jumlah = parseFloat(document.getElementById("jumlah").value);
+  const jenis = document.getElementById("jenis").value;
 
-  <script>
-    const API_URL = "https://script.google.com/macros/s/AKfycbzRxCqBRR6IyXH-94dOzBMeJVyJXrA9KyB98yCZNkj9kIIzvAVI42lyB3X4_0qdWr5w6A/exec";
-    const transaksi = [];
+  if (!keterangan || isNaN(jumlah) || jumlah <= 0) {
+    alert("Mohon isi keterangan dan jumlah dengan benar.");
+    return;
+  }
 
-    function formatRupiah(angka) {
-      return 'Rp ' + angka.toLocaleString('id-ID');
-    }
+  const formData = new URLSearchParams();
+  formData.append("keterangan", keterangan);
+  formData.append("jumlah", jumlah);
+  formData.append("jenis", jenis);
 
-    function tambahTransaksi() {
-      const keterangan = document.getElementById("keterangan").value.trim();
-      const jumlah = parseFloat(document.getElementById("jumlah").value);
-      const jenis = document.getElementById("jenis").value;
+  fetch(API_URL, {
+    method: "POST",
+    body: formData
+  })
+  .then(res => res.json())
+  .then(result => {
+    alert("✅ " + result.pesan);
+    transaksi.push({
+      tanggal: new Date().toLocaleDateString('id-ID'),
+      keterangan,
+      masuk: jenis === 'masuk' ? jumlah : 0,
+      keluar: jenis === 'keluar' ? jumlah : 0
+    });
+    renderTabel();
+    document.getElementById("keterangan").value = "";
+    document.getElementById("jumlah").value = "";
+  })
+  .catch(err => alert("❌ Gagal mengirim data: " + err));
+}
+const API_URL = "URL_WEB_APP_KAMU"; // Ganti dengan URL Web App dari langkah sebelumnya
+const transaksi = [];
 
-      if (!keterangan || isNaN(jumlah) || jumlah <= 0) {
-        alert("Mohon isi keterangan dan jumlah dengan benar.");
-        return;
-      }
+function formatRupiah(angka) {
+  return 'Rp ' + angka.toLocaleString('id-ID');
+}
 
-      const formData = new URLSearchParams();
-      formData.append("keterangan", keterangan);
-      formData.append("jumlah", jumlah);
-      formData.append("jenis", jenis);
+function tambahTransaksi() {
+  const keterangan = document.getElementById("keterangan").value.trim();
+  const jumlah = parseFloat(document.getElementById("jumlah").value);
+  const jenis = document.getElementById("jenis").value;
 
-      fetch(API_URL, {
-        method: "POST",
-        body: formData
-      })
-      .then(res => res.json())
-      .then(result => {
-        alert("✅ " + result.pesan);
-        transaksi.push({
-          tanggal: new Date().toLocaleDateString('id-ID'),
-          keterangan,
-          masuk: jenis === 'masuk' ? jumlah : 0,
-          keluar: jenis === 'keluar' ? jumlah : 0
-        });
-        renderTabel();
-        document.getElementById("keterangan").value = "";
-        document.getElementById("jumlah").value = "";
-      })
-      .catch(err => alert("❌ Gagal mengirim data: " + err));
-    }
+  if (!keterangan || isNaN(jumlah) || jumlah <= 0) {
+    alert("Mohon isi keterangan dan jumlah dengan benar.");
+    return;
+  }
 
-    function renderTabel() {
-      const tbody = document.querySelector("#tabelKeuangan tbody");
-      tbody.innerHTML = "";
-      let totalMasuk = 0, totalKeluar = 0;
+  const formData = new URLSearchParams();
+  formData.append("keterangan", keterangan);
+  formData.append("jumlah", jumlah);
+  formData.append("jenis", jenis);
 
-      transaksi.forEach((t, i) => {
-        tbody.innerHTML += `
-          <tr>
-            <td>${i + 1}</td>
-            <td>${t.tanggal}</td>
-            <td>${t.keterangan}</td>
-            <td>${t.masuk ? formatRupiah(t.masuk) : '-'}</td>
-            <td>${t.keluar ? formatRupiah(t.keluar) : '-'}</td>
-          </tr>
-        `;
-        totalMasuk += t.masuk;
-        totalKeluar += t.keluar;
-      });
-
-      document.getElementById("totalMasuk").innerText = formatRupiah(totalMasuk);
-      document.getElementById("totalKeluar").innerText = formatRupiah(totalKeluar);
-      document.getElementById("saldo").innerText = formatRupiah(totalMasuk - totalKeluar);
-    }
-  </script>
-</body>
-</html>
+  fetch(API_URL, {
+    method: "POST",
+    body: formData
+  })
+  .then(res => res.json())
+  .then(result => {
+    alert("✅ " + result.pesan);
+    transaksi.push({
+      tanggal: new Date().toLocaleDateString('id-ID'),
+      keterangan,
+      masuk: jenis === 'masuk' ? jumlah : 0,
+      keluar: jenis === 'keluar' ? jumlah : 0
+    });
+    renderTabel();
+    document.getElementById("keterangan").value = "";
+    document.getElementById("jumlah").value = "";
+  })
+  .catch(err => alert("❌ Gagal mengirim data: " + err));
+}
