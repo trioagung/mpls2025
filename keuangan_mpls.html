@@ -1,9 +1,5 @@
-const API_URL = "URL_WEB_APP_KAMU"; // Ganti dengan URL Web App dari langkah sebelumnya
+const API_URL = "https://script.google.com/macros/s/AKfycbx.../exec"; // ganti dengan URL Web App kamu
 const transaksi = [];
-
-function formatRupiah(angka) {
-  return 'Rp ' + angka.toLocaleString('id-ID');
-}
 
 function tambahTransaksi() {
   const keterangan = document.getElementById("keterangan").value.trim();
@@ -11,7 +7,7 @@ function tambahTransaksi() {
   const jenis = document.getElementById("jenis").value;
 
   if (!keterangan || isNaN(jumlah) || jumlah <= 0) {
-    alert("Mohon isi keterangan dan jumlah dengan benar.");
+    alert("Mohon isi data dengan benar.");
     return;
   }
 
@@ -37,46 +33,5 @@ function tambahTransaksi() {
     document.getElementById("keterangan").value = "";
     document.getElementById("jumlah").value = "";
   })
-  .catch(err => alert("❌ Gagal mengirim data: " + err));
-}
-const API_URL = "URL_WEB_APP_KAMU"; // Ganti dengan URL Web App dari langkah sebelumnya
-const transaksi = [];
-
-function formatRupiah(angka) {
-  return 'Rp ' + angka.toLocaleString('id-ID');
-}
-
-function tambahTransaksi() {
-  const keterangan = document.getElementById("keterangan").value.trim();
-  const jumlah = parseFloat(document.getElementById("jumlah").value);
-  const jenis = document.getElementById("jenis").value;
-
-  if (!keterangan || isNaN(jumlah) || jumlah <= 0) {
-    alert("Mohon isi keterangan dan jumlah dengan benar.");
-    return;
-  }
-
-  const formData = new URLSearchParams();
-  formData.append("keterangan", keterangan);
-  formData.append("jumlah", jumlah);
-  formData.append("jenis", jenis);
-
-  fetch(API_URL, {
-    method: "POST",
-    body: formData
-  })
-  .then(res => res.json())
-  .then(result => {
-    alert("✅ " + result.pesan);
-    transaksi.push({
-      tanggal: new Date().toLocaleDateString('id-ID'),
-      keterangan,
-      masuk: jenis === 'masuk' ? jumlah : 0,
-      keluar: jenis === 'keluar' ? jumlah : 0
-    });
-    renderTabel();
-    document.getElementById("keterangan").value = "";
-    document.getElementById("jumlah").value = "";
-  })
-  .catch(err => alert("❌ Gagal mengirim data: " + err));
+  .catch(err => alert("❌ Gagal: " + err));
 }
