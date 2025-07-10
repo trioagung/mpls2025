@@ -5,76 +5,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Keuangan MPLS</title>
   <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(to right, #6a11cb, #2575fc);
-      color: white;
-      margin: 0;
-      padding: 20px;
-    }
-    h1 {
-      text-align: center;
-    }
-    .container {
-      max-width: 1000px;
-      margin: auto;
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(10px);
-      padding: 20px;
-      border-radius: 10px;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 20px;
-    }
-    th, td {
-      padding: 12px;
-      border: 1px solid rgba(255, 255, 255, 0.4);
-      text-align: left;
-    }
-    th {
-      background-color: rgba(255, 255, 255, 0.2);
-    }
-    input, select {
-      padding: 8px;
-      width: 100%;
-      border: none;
-      border-radius: 6px;
-      background: rgba(255, 255, 255, 0.2);
-      color: white;
-    }
-    input::placeholder {
-      color: white;
-    }
-    select option {
-      color: black;
-    }
-    button {
-      margin-top: 10px;
-      padding: 10px 20px;
-      background-color: #4caf50;
-      color: white;
-      font-weight: bold;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #45a049;
-    }
-    .summary-box {
-      margin-top: 30px;
-      background: rgba(255, 255, 255, 0.15);
-      padding: 20px;
-      border-radius: 10px;
-      backdrop-filter: blur(12px);
-      color: #fff;
-    }
-    .summary-box p {
-      font-size: 1.2em;
-      margin: 10px 0;
-    }
+    /* [Gaya tampilan tetap, tidak berubah] */
+    body { font-family: 'Segoe UI', sans-serif; background: linear-gradient(to right, #6a11cb, #2575fc); color: white; margin: 0; padding: 20px; }
+    h1 { text-align: center; }
+    .container { max-width: 1000px; margin: auto; background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); padding: 20px; border-radius: 10px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    th, td { padding: 12px; border: 1px solid rgba(255,255,255,0.4); text-align: left; }
+    th { background-color: rgba(255,255,255,0.2); }
+    input, select { padding: 8px; width: 100%; border: none; border-radius: 6px; background: rgba(255,255,255,0.2); color: white; }
+    input::placeholder { color: white; }
+    select option { color: black; }
+    button { margin-top: 10px; padding: 10px 20px; background-color: #4caf50; color: white; font-weight: bold; border: none; border-radius: 8px; cursor: pointer; }
+    button:hover { background-color: #45a049; }
+    .summary-box { margin-top: 30px; background: rgba(255,255,255,0.15); padding: 20px; border-radius: 10px; backdrop-filter: blur(12px); color: #fff; }
+    .summary-box p { font-size: 1.2em; margin: 10px 0; }
   </style>
 </head>
 <body>
@@ -128,28 +72,23 @@
         return;
       }
 
-      const dataToSend = {
-        tanggal: new Date().toLocaleDateString('id-ID'),
-        keterangan,
-        jenis,
-        jumlah
-      };
+      const formData = new URLSearchParams();
+      formData.append("keterangan", keterangan);
+      formData.append("jumlah", jumlah);
+      formData.append("jenis", jenis);
 
       fetch(API_URL, {
         method: "POST",
-        body: JSON.stringify(dataToSend),
-        headers: {
-          "Content-Type": "application/json"
-        }
+        body: formData
       })
-      .then(res => res.text())
-      .then(msg => {
-        alert("✅ Data berhasil disimpan!");
+      .then(res => res.json())
+      .then(result => {
+        alert("✅ " + result.pesan);
         transaksi.push({
-          tanggal: dataToSend.tanggal,
-          keterangan: dataToSend.keterangan,
-          masuk: dataToSend.jenis === 'masuk' ? dataToSend.jumlah : 0,
-          keluar: dataToSend.jenis === 'keluar' ? dataToSend.jumlah : 0
+          tanggal: new Date().toLocaleDateString('id-ID'),
+          keterangan,
+          masuk: jenis === 'masuk' ? jumlah : 0,
+          keluar: jenis === 'keluar' ? jumlah : 0
         });
         renderTabel();
         document.getElementById("keterangan").value = "";
